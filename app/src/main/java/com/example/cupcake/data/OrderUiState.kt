@@ -16,18 +16,20 @@
 package com.example.cupcake.data
 
 /**
- * Data class that represents the current UI state in terms of [quantity], [flavor],
- * [dateOptions], selected pickup [date] and [price]
+ * Data class that represents the current UI state in terms of the selected [processor],
+ * [memory], [storage], [monitor], [graphicsCard] and total [price]
  */
 data class OrderUiState(
-    /** Selected cupcake quantity (1, 6, 12) */
-    val quantity: Int = 0,
-    /** Flavor of the cupcakes in the order (such as "Chocolate", "Vanilla", etc..) */
-    val flavor: String = "",
-    /** Selected date for pickup (such as "Jan 1") */
-    val date: String = "",
+    /** Selected processor (such as "AMD Ryzen 5 5500") */
+    val processor: String = "",
+    /** Selected memory (RAM) (such as "16GB (2x8GB) DDR4 3200MHz Corsair Vengeance LPX") */
+    val memory: String = "",
+    /** Selected storage drive (such as "512GB SSD NVMe Kingston NV2") */
+    val storage: String = "",
+    /** Selected monitor (such as "24\" LG UltraGear 24GN60R (FHD 144Hz)") */
+    val monitor: String = "",
+    /** Selected graphics card (such as "NVIDIA GeForce RTX 4060 8GB") */
+    val graphicsCard: String = "",
     /** Total price for the order */
-    val price: String = "",
-    /** Available pickup dates for the order*/
-    val pickupOptions: List<String> = listOf()
+    val price: String = ""
 )

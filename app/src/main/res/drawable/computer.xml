@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2023 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          https://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<!-- Computer icon for the start fragment -->
+<vector android:height="200dp" android:viewportHeight="240"
+    android:viewportWidth="300" android:width="250dp" xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- PC tower -->
+    <path android:fillColor="#ec407a" android:pathData="M215,30h60v160h-60z"/>
+    <path android:fillColor="#f48fb1" android:pathData="M221,38h48v144h-48z"/>
+    <path android:fillColor="#f06292" android:pathData="M227,50h36v6h-36z"/>
+    <path android:fillColor="#f06292" android:pathData="M227,64h36v6h-36z"/>
+    <path android:fillColor="#ec407a" android:pathData="M233,150a12,12 0,1 0,24 0a12,12 0,1 0,-24 0z"/>
+    <!-- Monitor -->
+    <path android:fillColor="#03a9f4" android:pathData="M20,25h180v125h-180z"/>
+    <path android:fillColor="#81d4fa" android:pathData="M30,35h160v105h-160z"/>
+    <path android:fillColor="#673ab7" android:pathData="M95,65l45,22.5l-45,22.5z"/>
+    <path android:fillColor="#4fc3f7" android:pathData="M100,150h20v28h-20z"/>
+    <path android:fillColor="#29b6f6" android:pathData="M70,178h80v12h-80z"/>
+    <!-- Keyboard -->
+    <path android:fillColor="#ffe0b2" android:pathData="M20,205h200v25h-200z"/>
+    <path android:fillColor="#f48fb1" android:pathData="M28,211h20v5h-20z"/>
+    <path android:fillColor="#f48fb1" android:pathData="M54,211h20v5h-20z"/>
+    <path android:fillColor="#f48fb1" android:pathData="M80,211h20v5h-20z"/>
+    <path android:fillColor="#f48fb1" android:pathData="M106,211h20v5h-20z"/>
+    <path android:fillColor="#f48fb1" android:pathData="M132,211h20v5h-20z"/>
+    <path android:fillColor="#f48fb1" android:pathData="M158,211h20v5h-20z"/>
+    <path android:fillColor="#f48fb1" android:pathData="M184,211h28v5h-28z"/>
+    <path android:fillColor="#f48fb1" android:pathData="M48,220h124v5h-124z"/>
+</vector>

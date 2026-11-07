@@ -35,20 +35,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.cupcake.R
-import com.example.cupcake.data.DataSource
 import com.example.cupcake.ui.theme.CupcakeTheme
 
 /**
- * Composable that allows the user to select the desired cupcake quantity and expects
- * [onNextButtonClicked] lambda that expects the selected quantity and triggers the navigation to
- * next screen
+ * Composable that shows the shop's image, title and motto and expects
+ * [onStartButtonClicked] lambda that triggers the navigation to the first selection screen
  */
 @Composable
 fun StartOrderScreen(
-    quantityOptions: List<Pair<Int, Int>>,
+    onStartButtonClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -62,7 +62,7 @@ fun StartOrderScreen(
         ) {
             Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_medium)))
             Image(
-                painter = painterResource(R.drawable.cupcake),
+                painter = painterResource(R.drawable.computer),
                 contentDescription = null,
                 modifier = Modifier.width(300.dp)
             )
@@ -70,6 +70,12 @@ fun StartOrderScreen(
             Text(
                 text = stringResource(R.string.order_cupcakes),
                 style = MaterialTheme.typography.headlineSmall
+            )
+            Text(
+                text = stringResource(R.string.motto),
+                style = MaterialTheme.typography.bodyLarge,
+                fontStyle = FontStyle.Italic,
+                textAlign = TextAlign.Center
             )
             Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_small)))
         }
@@ -80,12 +86,10 @@ fun StartOrderScreen(
                 dimensionResource(id = R.dimen.padding_medium)
             )
         ) {
-            quantityOptions.forEach { item ->
-                SelectQuantityButton(
-                    labelResourceId = item.first,
-                    onClick = {}
-                )
-            }
+            SelectQuantityButton(
+                labelResourceId = R.string.start_building,
+                onClick = onStartButtonClicked
+            )
         }
     }
 }
@@ -113,7 +117,7 @@ fun SelectQuantityButton(
 fun StartOrderPreview() {
     CupcakeTheme {
         StartOrderScreen(
-            quantityOptions = DataSource.quantityOptions,
+            onStartButtonClicked = {},
             modifier = Modifier
                 .fillMaxSize()
                 .padding(dimensionResource(R.dimen.padding_medium))
