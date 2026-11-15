@@ -16,20 +16,12 @@
 package com.example.cupcake.data
 
 /**
- * Data class that represents the current UI state in terms of the selected [processor],
- * [memory], [storage], [monitor], [graphicsCard] and total [price]
+ * Data class that represents the current UI state in terms of the [selectedCategory]
+ * and [selectedPlace].
  */
 data class OrderUiState(
-    /** Selected processor (such as "AMD Ryzen 5 5500") */
-    val processor: String = "",
-    /** Selected memory (RAM) (such as "16GB (2x8GB) DDR4 3200MHz Corsair Vengeance LPX") */
-    val memory: String = "",
-    /** Selected storage drive (such as "512GB SSD NVMe Kingston NV2") */
-    val storage: String = "",
-    /** Selected monitor (such as "24\" LG UltraGear 24GN60R (FHD 144Hz)") */
-    val monitor: String = "",
-    /** Selected graphics card (such as "NVIDIA GeForce RTX 4060 8GB") */
-    val graphicsCard: String = "",
-    /** Total price for the order */
-    val price: String = ""
+    /** Category the user opened (such as Coffee Shops) */
+    val selectedCategory: Category? = null,
+    /** Place the user opened to see its details */
+    val selectedPlace: Place? = null
 )

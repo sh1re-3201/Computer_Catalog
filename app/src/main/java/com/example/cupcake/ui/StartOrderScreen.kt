@@ -20,6 +20,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -32,6 +33,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -43,8 +46,8 @@ import com.example.cupcake.R
 import com.example.cupcake.ui.theme.CupcakeTheme
 
 /**
- * Composable that shows the shop's image, title and motto and expects
- * [onStartButtonClicked] lambda that triggers the navigation to the first selection screen
+ * Composable that shows the city image, title and tagline and expects
+ * [onStartButtonClicked] lambda that triggers navigation to the categories screen
  */
 @Composable
 fun StartOrderScreen(
@@ -62,9 +65,13 @@ fun StartOrderScreen(
         ) {
             Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_medium)))
             Image(
-                painter = painterResource(R.drawable.computer),
+                painter = painterResource(R.drawable.yogyakarta),
                 contentDescription = null,
-                modifier = Modifier.width(300.dp)
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .width(300.dp)
+                    .aspectRatio(1f)
+                    .clip(MaterialTheme.shapes.medium)
             )
             Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_medium)))
             Text(

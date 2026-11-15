@@ -52,16 +52,13 @@ import com.example.cupcake.ui.SelectOptionScreen
 import com.example.cupcake.ui.StartOrderScreen
 
 /**
- * Screens of the app. [title] is the string resource shown in the app bar for that screen.
+ * Screens of the app. [title] is the fallback string resource shown in the app bar for that screen.
  */
 enum class CupcakeScreen(@StringRes val title: Int) {
     Start(title = R.string.app_name),
-    Processor(title = R.string.choose_processor),
-    Memory(title = R.string.choose_memory),
-    Storage(title = R.string.choose_storage),
-    Monitor(title = R.string.choose_monitor),
-    GraphicsCard(title = R.string.choose_graphics_card),
-    Summary(title = R.string.order_summary)
+    Categories(title = R.string.choose_category),
+    Places(title = R.string.recommendations),
+    Detail(title = R.string.place_details)
 }
 
 /**
@@ -69,13 +66,13 @@ enum class CupcakeScreen(@StringRes val title: Int) {
  */
 @Composable
 fun CupcakeAppBar(
-    currentScreen: CupcakeScreen,
+    title: String,
     canNavigateBack: Boolean,
     navigateUp: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     TopAppBar(
-        title = { Text(stringResource(currentScreen.title)) },
+        title = { Text(title) },
         colors = TopAppBarDefaults.mediumTopAppBarColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer
         ),
@@ -104,18 +101,22 @@ fun CupcakeApp(
     val currentScreen = CupcakeScreen.valueOf(
         backStackEntry?.destination?.route ?: CupcakeScreen.Start.name
     )
+    val uiState by viewModel.uiState.collectAsState()
+    val title = when (currentScreen) {
+        CupcakeScreen.Places -> uiState.selectedCategory?.let { stringResource(it.nameResourceId) }
+        CupcakeScreen.Detail -> uiState.selectedPlace?.name
+        else -> null
+    } ?: stringResource(currentScreen.title)
 
     Scaffold(
         topBar = {
             CupcakeAppBar(
-                currentScreen = currentScreen,
+                title = title,
                 canNavigateBack = navController.previousBackStackEntry != null,
                 navigateUp = { navController.navigateUp() }
             )
         }
     ) { innerPadding ->
-        val uiState by viewModel.uiState.collectAsState()
-
         NavHost(
             navController = navController,
             startDestination = CupcakeScreen.Start.name,
@@ -127,116 +128,56 @@ fun CupcakeApp(
             composable(route = CupcakeScreen.Start.name) {
                 StartOrderScreen(
                     onStartButtonClicked = {
-                        navController.navigate(CupcakeScreen.Processor.name)
+                        navController.navigate(CupcakeScreen.Categories.name)
                     },
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(dimensionResource(R.dimen.padding_medium))
                 )
             }
-            composable(route = CupcakeScreen.Processor.name) {
+            composable(route = CupcakeScreen.Categories.name) {
                 SelectOptionScreen(
-                    subtotal = uiState.price,
-                    options = DataSource.processors.keys.toList(),
-                    onSelectionChanged = { viewModel.setProcessor(it) },
-                    onCancelButtonClicked = {
-                        cancelOrderAndNavigateToStart(viewModel, navController)
-                    },
-                    onNextButtonClicked = {
-                        navController.navigate(CupcakeScreen.Memory.name)
+                    options = DataSource.categories.map { stringResource(it.nameResourceId) },
+                    onOptionClicked = { index ->
+                        viewModel.setCategory(DataSource.categories[index])
+                        navController.navigate(CupcakeScreen.Places.name)
                     },
                     modifier = Modifier.fillMaxHeight()
                 )
             }
-            composable(route = CupcakeScreen.Memory.name) {
+            composable(route = CupcakeScreen.Places.name) {
+                val places = uiState.selectedCategory?.places.orEmpty()
                 SelectOptionScreen(
-                    subtotal = uiState.price,
-                    options = DataSource.memories.keys.toList(),
-                    onSelectionChanged = { viewModel.setMemory(it) },
-                    onCancelButtonClicked = {
-                        cancelOrderAndNavigateToStart(viewModel, navController)
-                    },
-                    onNextButtonClicked = {
-                        navController.navigate(CupcakeScreen.Storage.name)
+                    options = places.map { it.name },
+                    optionImages = places.map { it.imageResourceId },
+                    onOptionClicked = { index ->
+                        viewModel.setPlace(places[index])
+                        navController.navigate(CupcakeScreen.Detail.name)
                     },
                     modifier = Modifier.fillMaxHeight()
                 )
             }
-            composable(route = CupcakeScreen.Storage.name) {
-                SelectOptionScreen(
-                    subtotal = uiState.price,
-                    options = DataSource.storages.keys.toList(),
-                    onSelectionChanged = { viewModel.setStorage(it) },
-                    onCancelButtonClicked = {
-                        cancelOrderAndNavigateToStart(viewModel, navController)
-                    },
-                    onNextButtonClicked = {
-                        navController.navigate(CupcakeScreen.Monitor.name)
-                    },
-                    modifier = Modifier.fillMaxHeight()
-                )
-            }
-            composable(route = CupcakeScreen.Monitor.name) {
-                SelectOptionScreen(
-                    subtotal = uiState.price,
-                    options = DataSource.monitors.keys.toList(),
-                    onSelectionChanged = { viewModel.setMonitor(it) },
-                    onCancelButtonClicked = {
-                        cancelOrderAndNavigateToStart(viewModel, navController)
-                    },
-                    onNextButtonClicked = {
-                        navController.navigate(CupcakeScreen.GraphicsCard.name)
-                    },
-                    modifier = Modifier.fillMaxHeight()
-                )
-            }
-            composable(route = CupcakeScreen.GraphicsCard.name) {
-                SelectOptionScreen(
-                    subtotal = uiState.price,
-                    options = DataSource.graphicsCards.keys.toList(),
-                    onSelectionChanged = { viewModel.setGraphicsCard(it) },
-                    onCancelButtonClicked = {
-                        cancelOrderAndNavigateToStart(viewModel, navController)
-                    },
-                    onNextButtonClicked = {
-                        navController.navigate(CupcakeScreen.Summary.name)
-                    },
-                    modifier = Modifier.fillMaxHeight()
-                )
-            }
-            composable(route = CupcakeScreen.Summary.name) {
+            composable(route = CupcakeScreen.Detail.name) {
                 val context = LocalContext.current
-                OrderSummaryScreen(
-                    orderUiState = uiState,
-                    onCancelButtonClicked = {
-                        cancelOrderAndNavigateToStart(viewModel, navController)
-                    },
-                    onSendButtonClicked = { subject: String, summary: String ->
-                        shareOrder(context, subject = subject, summary = summary)
-                    },
-                    modifier = Modifier.fillMaxHeight()
-                )
+                uiState.selectedPlace?.let { place ->
+                    OrderSummaryScreen(
+                        place = place,
+                        onSendButtonClicked = { subject: String, summary: String ->
+                            shareOrder(context, subject = subject, summary = summary)
+                        },
+                        modifier = Modifier.fillMaxHeight()
+                    )
+                }
             }
         }
     }
 }
 
 /**
- * Resets the [OrderViewModel] and pops up to [CupcakeScreen.Start]
- */
-private fun cancelOrderAndNavigateToStart(
-    viewModel: OrderViewModel,
-    navController: NavHostController
-) {
-    viewModel.resetOrder()
-    navController.popBackStack(CupcakeScreen.Start.name, inclusive = false)
-}
-
-/**
- * Creates an intent to share order details
+ * Creates an intent to share place details
  */
 private fun shareOrder(context: Context, subject: String, summary: String) {
-    // Create an ACTION_SEND implicit intent with order details in the intent extras
+    // Create an ACTION_SEND implicit intent with recommendation details in the intent extras
     val intent = Intent(Intent.ACTION_SEND).apply {
         type = "text/plain"
         putExtra(Intent.EXTRA_SUBJECT, subject)

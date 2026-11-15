@@ -14,27 +14,21 @@
      limitations under the License.
 -->
 <resources>
-    <string name="app_name">Ambatugame</string>
-    <string name="order_cupcakes">Build Your Gaming PC</string>
-    <string name="motto">Game is for us, I\'m about to game</string>
-    <string name="start_building">Start Building</string>
-    <string name="choose_processor">Choose Processor</string>
-    <string name="choose_memory">Choose Memory</string>
-    <string name="choose_storage">Choose Storage</string>
-    <string name="choose_monitor">Choose Monitor</string>
-    <string name="choose_graphics_card">Choose Graphics Card</string>
-    <string name="cancel">Cancel</string>
-    <string name="next">Next</string>
-    <string name="order_summary">Order Summary</string>
-    <string name="send">Send Order to Another App</string>
-    <string name="processor">Processor</string>
-    <string name="memory">Memory</string>
-    <string name="storage">Storage</string>
-    <string name="monitor">Monitor</string>
-    <string name="graphics_card">Graphics Card</string>
-    <string name="subtotal_price">Subtotal %s</string>
-    <string name="total_price">Total %s</string>
-    <string name="new_cupcake_order">New Ambatugame Order</string>
-    <string name="order_details">Processor: %1$s \nMemory: %2$s \nStorage: %3$s \nMonitor: %4$s \nGraphics Card: %5$s \nTotal: %6$s \n\nThank you for shopping at Ambatugame!\n\"Game is for us, I\'m about to game\"</string>
+    <string name="app_name">My City: Yogyakarta</string>
+    <string name="order_cupcakes">Discover Yogyakarta</string>
+    <string name="motto">Your guide to the best places in the city of Yogyakarta</string>
+    <string name="start_building">Explore Yogyakarta</string>
+    <string name="choose_category">Categories</string>
+    <string name="recommendations">Recommendations</string>
+    <string name="place_details">Place Details</string>
+    <string name="coffee_shops">Coffee Shops</string>
+    <string name="restaurants">Restaurants</string>
+    <string name="parks_nature">Parks &amp; Nature</string>
+    <string name="shopping_centers">Shopping Centers</string>
+    <string name="tourist_attractions">Tourist Attractions</string>
+    <string name="address">Address</string>
+    <string name="send">Share This Place</string>
+    <string name="new_cupcake_order">Check out this place in Yogyakarta!</string>
+    <string name="order_details">%1$s\n\n%2$s\n\nAddress: %3$s\n\nShared from My City: Yogyakarta</string>
     <string name="back_button">Back</string>
 </resources>

@@ -15,66 +15,47 @@
  */
 package com.example.cupcake.ui
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
-import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.cupcake.R
-import com.example.cupcake.data.OrderUiState
-import com.example.cupcake.ui.components.FormattedPriceLabel
+import com.example.cupcake.data.Place
 import com.example.cupcake.ui.theme.CupcakeTheme
 
 /**
- * This composable expects [orderUiState] that represents the order state, [onCancelButtonClicked]
- * lambda that triggers canceling the order and passes the final order to [onSendButtonClicked]
- * lambda
+ * This composable expects [place] that represents the selected recommendation and passes
+ * the formatted recommendation details to [onSendButtonClicked] lambda.
  */
 @Composable
 fun OrderSummaryScreen(
-    orderUiState: OrderUiState,
-    onCancelButtonClicked: () -> Unit,
+    place: Place,
     onSendButtonClicked: (String, String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    //Load and format a string resource with the parameters.
     val orderSummary = stringResource(
         R.string.order_details,
-        orderUiState.processor,
-        orderUiState.memory,
-        orderUiState.storage,
-        orderUiState.monitor,
-        orderUiState.graphicsCard,
-        orderUiState.price
+        place.name,
+        place.description,
+        place.address
     )
     val newOrder = stringResource(R.string.new_cupcake_order)
-    //Create a list of order summary to display
-    val items = listOf(
-        // Summary line 1: display selected processor
-        Pair(stringResource(R.string.processor), orderUiState.processor),
-        // Summary line 2: display selected memory
-        Pair(stringResource(R.string.memory), orderUiState.memory),
-        // Summary line 3: display selected storage
-        Pair(stringResource(R.string.storage), orderUiState.storage),
-        // Summary line 4: display selected monitor
-        Pair(stringResource(R.string.monitor), orderUiState.monitor),
-        // Summary line 5: display selected graphics card
-        Pair(stringResource(R.string.graphics_card), orderUiState.graphicsCard)
-    )
 
     Column(
         modifier = modifier,
@@ -84,36 +65,38 @@ fun OrderSummaryScreen(
             modifier = Modifier.padding(dimensionResource(R.dimen.padding_medium)),
             verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_small))
         ) {
-            items.forEach { item ->
-                Text(item.first.uppercase())
-                Text(text = item.second, fontWeight = FontWeight.Bold)
-                Divider(thickness = dimensionResource(R.dimen.thickness_divider))
-            }
-            Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_small)))
-            FormattedPriceLabel(
-                subtotal = orderUiState.price,
-                modifier = Modifier.align(Alignment.End)
+            Image(
+                painter = painterResource(place.imageResourceId),
+                contentDescription = place.name,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .aspectRatio(4f / 3f)
+                    .clip(MaterialTheme.shapes.medium)
             )
+            Text(
+                text = place.name,
+                style = MaterialTheme.typography.headlineSmall
+            )
+            Text(
+                text = place.description,
+                style = MaterialTheme.typography.bodyLarge
+            )
+            Divider(thickness = dimensionResource(R.dimen.thickness_divider))
+            Text(stringResource(R.string.address).uppercase())
+            Text(
+                text = place.address,
+                fontWeight = FontWeight.Bold
+            )
+            Divider(thickness = dimensionResource(R.dimen.thickness_divider))
         }
-        Row(
-            modifier = Modifier.padding(dimensionResource(R.dimen.padding_medium))
+        Button(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(dimensionResource(R.dimen.padding_medium)),
+            onClick = { onSendButtonClicked(newOrder, orderSummary) }
         ) {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_small))
-            ) {
-                Button(
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = { onSendButtonClicked(newOrder, orderSummary) }
-                ) {
-                    Text(stringResource(R.string.send))
-                }
-                OutlinedButton(
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = onCancelButtonClicked
-                ) {
-                    Text(stringResource(R.string.cancel))
-                }
-            }
+            Text(stringResource(R.string.send))
         }
     }
 }
@@ -123,16 +106,13 @@ fun OrderSummaryScreen(
 fun OrderSummaryPreview() {
     CupcakeTheme {
         OrderSummaryScreen(
-            orderUiState = OrderUiState(
-                "AMD Ryzen 5 5500",
-                "16GB (2x8GB) DDR4 3200MHz Corsair Vengeance LPX",
-                "512GB SSD NVMe Kingston NV2",
-                "24\" LG UltraGear 24GN60R (FHD 144Hz)",
-                "NVIDIA GeForce RTX 4060 8GB",
-                "Rp10.500.000"
+            place = Place(
+                name = "Kopi Joss Lik Man",
+                description = "Angkringan legendaris di dekat Stasiun Tugu yang terkenal dengan kopi joss, yaitu kopi hitam yang disajikan bersama bara arang panas.",
+                address = "Jl. Wongsodirjan, Sosromenduran, Gedong Tengen",
+                imageResourceId = R.drawable.yogyakarta
             ),
-            onSendButtonClicked = { subject: String, summary: String -> },
-            onCancelButtonClicked = {},
+            onSendButtonClicked = { _: String, _: String -> },
             modifier = Modifier.fillMaxHeight()
         )
     }
